@@ -1,0 +1,32 @@
+name: zas
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  dio: ^5.4.0
+  flutter:
+    sdk: flutter
+  go_router: ^13.0.0
+  provider: ^6.1.1
+  card_swiper: ^3.0.1
+  google_nav_bar: ^5.0.6
+  intl: ^0.17.0
+  date_time_picker: ^2.1.0
+  image_picker: ^1.0.5
+  flutter_paypal_payment: ^1.0.6
+  flutter_inappwebview: ^5.8.0
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/logo.jpeg
