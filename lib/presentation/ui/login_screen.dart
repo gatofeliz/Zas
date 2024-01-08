@@ -20,6 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   Future<void> loginUser() async {
     final dio = Dio();
@@ -97,31 +98,41 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+ Widget _entryField(String title, {bool isPassword = false}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        TextField(
+          controller: isPassword ? passwordController : emailController,
+          obscureText: isPassword && _obscureText,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            fillColor: const Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: const Icon(Icons.remove_red_eye),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                : null,
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextField(
-            controller: isPassword ? passwordController : emailController,
-            obscureText: isPassword,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              fillColor: Color(0xfff3f3f4),
-              filled: true,
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
   }
 
   Widget _submitButton() {
