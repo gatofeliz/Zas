@@ -235,7 +235,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 if (_pickedImage != null) {
                   _addGift(
                     userProvider.userToken,
@@ -244,7 +244,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     userProvider.userId,
                     File(_pickedImage!.path),
                   );
-                  await obtenerRegalos();
+                  obtenerRegalos();
                 } else {
                   // Manejar el caso donde no se ha seleccionado una imagen
                   print('Debes seleccionar una imagen para el regalo.');

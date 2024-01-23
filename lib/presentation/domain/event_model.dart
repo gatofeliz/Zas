@@ -5,6 +5,8 @@ class EventItem {
   final String code;
   final int userId;
   final String published;
+  final int eventId;
+  final int? giftId; 
 
   EventItem({
     required this.id,
@@ -13,6 +15,8 @@ class EventItem {
     required this.code,
     required this.userId,
     required this.published,
+    required this.eventId,
+    this.giftId,
   });
 
   factory EventItem.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class EventItem {
       code: json['code'],
       userId: json['user_id'],
       published: json['published'],
+      eventId: json['event_id'],
+      giftId: json['gift_id'],
     );
   }
 }

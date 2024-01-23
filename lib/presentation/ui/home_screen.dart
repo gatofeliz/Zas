@@ -29,6 +29,7 @@ class _InvitedEventsScreenState extends State<InvitedEventsScreen> {
     final invitedEventsProvider =
         Provider.of<InvitedEventsProvider>(context, listen: false);
     final url = 'https://zasok.com/api/eventAccepted/${userProvider.userId}';
+    print(userProvider.userId);
 
     try {
       final response = await dio.get(

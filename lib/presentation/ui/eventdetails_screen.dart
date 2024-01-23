@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,9 +31,10 @@ class _InvitedEventDetailsState extends State<InvitedEventDetails> {
     final dio = Dio();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+    print(widget.event.id);
     try {
       final response = await dio.get(
-        'https://zasok.com/api/giftList/${widget.event.id}',
+        'https://zasok.com/api/giftList/${widget.event.eventId}',
         options: Options(
           headers: {'Authorization': 'Bearer ${userProvider.userToken}'},
         ),
@@ -54,7 +57,6 @@ class _InvitedEventDetailsState extends State<InvitedEventDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalles del Evento'),
