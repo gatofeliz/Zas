@@ -104,7 +104,7 @@ class _InvitedEventDetailsState extends State<InvitedEventDetails> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Image.network(
-                                      'https://zasok.com/storage/images/${userProvider.userId}/${gift.photo}'),
+                                      'https://zasok.com/storage/images/${gift.userId}/${gift.photo}'),
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
