@@ -22,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> registerUser() async {
     final dio = Dio();
-    const url = 'https://zas.onta.com.mx/public/api/register';
+    const url = 'https://zasok.com/public/api/register';
     if (nameController.text.isEmpty) {
       _showToast('Por favor, ingrese su nombre.');
       return;
@@ -66,7 +66,6 @@ class _RegisterPageState extends State<RegisterPage> {
           _showToast(userData['message']);
         }
       } else {
-        
         _showToast('Error al registrar usuario');
       }
     } catch (e) {
@@ -123,8 +122,8 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextButton(
         onPressed: registerUser,
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all<Color>(const Color.fromARGB(236, 164, 140, 222)),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              const Color.fromARGB(236, 164, 140, 222)),
           shape: MaterialStateProperty.all<OutlinedBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -146,7 +145,8 @@ class _RegisterPageState extends State<RegisterPage> {
         _entryField("Apellido", lastNameController),
         _entryField("Correo", emailController),
         _entryField("Contraseña", passwordController, isPassword: true),
-        _entryField("Confirmar contraseña", confirmPasswordController, isPassword: true)
+        _entryField("Confirmar contraseña", confirmPasswordController,
+            isPassword: true)
       ],
     );
   }
@@ -157,11 +157,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () { 
+          onPressed: () {
             context.go('/');
-           },
+          },
           icon: const Icon(Icons.arrow_back),
-          ),
+        ),
       ),
       body: Container(
         height: height,

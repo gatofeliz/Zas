@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../controllers/user_provider.dart';
 
-
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, this.title}) : super(key: key);
 
@@ -24,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> loginUser() async {
     final dio = Dio();
-    const url = 'https://zas.onta.com.mx/public/api/login';
+    const url = 'https://zasok.com/api/login';
 
     // Validaciones
     if (emailController.text.isEmpty) {
@@ -32,12 +30,12 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    if(passwordController.text.length < 6){
+    if (passwordController.text.length < 6) {
       _showToast('La contraseña debe tener al menos 6 caracteres.');
       return;
     }
 
-    if(passwordController.text.length > 50){
+    if (passwordController.text.length > 50) {
       _showToast('La contraseña debe tener menos de 50 caracteres.');
       return;
     }
@@ -71,13 +69,12 @@ class _LoginPageState extends State<LoginPage> {
           // ignore: use_build_context_synchronously
           Provider.of<UserProvider>(context, listen: false)
               .setUserData(userData);
-          
+
           // ignore: use_build_context_synchronously
           context.go('/principal');
         } else {
           _showToast(response.data['message']);
         }
-
       } else {
         _showToast('Error al Iniciar Sesion');
       }
@@ -98,67 +95,66 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
- Widget _entryField(String title, {bool isPassword = false}) {
-  return Container(
-    margin: const EdgeInsets.symmetric(vertical: 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        TextField(
-          controller: isPassword ? passwordController : emailController,
-          obscureText: isPassword && _obscureText,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            fillColor: const Color(0xfff3f3f4),
-            filled: true,
-            suffixIcon: isPassword
-                ? IconButton(
-                    icon: const Icon(Icons.remove_red_eye),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
-                : null,
+  Widget _entryField(String title, {bool isPassword = false}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            controller: isPassword ? passwordController : emailController,
+            obscureText: isPassword && _obscureText,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              fillColor: const Color(0xfff3f3f4),
+              filled: true,
+              suffixIcon: isPassword
+                  ? IconButton(
+                      icon: const Icon(Icons.remove_red_eye),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _submitButton() {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(32),
-    alignment: Alignment.center,
-    child: TextButton(
-      onPressed: loginUser,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(236, 164, 140, 222)),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(32),
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: loginUser,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+              const Color.fromARGB(236, 164, 140, 222)),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
           ),
         ),
+        child: const Text(
+          'Iniciar sesion',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
-      child: const Text(
-        'Iniciar sesion',
-        style: TextStyle(fontSize: 20, color: Colors.white),
-      ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   Widget _divider() {
     return Container(
@@ -225,7 +221,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
@@ -235,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -275,5 +270,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-

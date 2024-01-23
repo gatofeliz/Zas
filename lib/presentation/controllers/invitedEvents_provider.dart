@@ -17,6 +17,10 @@ class InvitedEventsProvider extends ChangeNotifier {
 
   Stream<List<EventItem>> get eventsStream => _eventsController.stream;
 
+  List<int> getInvitedEventIds() {
+    return _invitedEventList.map((event) => event.id).toList();
+  }
+
   set invitedEventList(List<EventItem> events) {
     _invitedEventList = events;
     _eventsController.add(_invitedEventList);
@@ -27,7 +31,7 @@ class InvitedEventsProvider extends ChangeNotifier {
     invitedEventList = List.from(newList);
     _eventsController.add(_invitedEventList);
   }
-  
+
   @override
   void dispose() {
     _eventsController.close();

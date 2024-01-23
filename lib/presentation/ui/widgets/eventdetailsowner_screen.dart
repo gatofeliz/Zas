@@ -34,7 +34,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   }
 
   Future<void> _pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       setState(() {
@@ -49,7 +50,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
     try {
       final response = await dio.get(
-        'https://zas.onta.com.mx/api/giftList/${widget.event.id}',
+        'https://zasok.com/api/giftList/${widget.event.id}',
         options: Options(
           headers: {'Authorization': 'Bearer ${userProvider.userToken}'},
         ),
@@ -69,7 +70,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     }
   }
 
-  Future<void> _addGift(String userToken, String name, int eventID, int? userId, File photo) async {
+  Future<void> _addGift(String userToken, String name, int eventID, int? userId,
+      File photo) async {
     final dio = Dio();
     final headers = {'Authorization': 'Bearer $userToken'};
 
@@ -82,7 +84,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       });
 
       final response = await dio.post(
-        'https://zas.onta.com.mx/api/storeGift',
+        'https://zasok.com/api/storeGift',
         data: formData,
         options: Options(headers: headers),
       );
@@ -90,7 +92,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       if (response.statusCode == 200) {
         print('Regalo almacenado con éxito');
       } else {
-        print('Error al almacenar el regalo. Código de estado: ${response.statusCode}');
+        print(
+            'Error al almacenar el regalo. Código de estado: ${response.statusCode}');
       }
     } catch (e) {
       print('Error en la petición: $e');
@@ -102,14 +105,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final headers = {'Authorization': 'Bearer $userToken'};
     try {
       final response = await dio.delete(
-        'https://zas.onta.com.mx/api/deleteEvent/$eventId',
+        'https://zasok.com/api/deleteEvent/$eventId',
         options: Options(headers: headers),
       );
 
       if (response.statusCode == 200) {
         print('Evento eliminado con éxito');
       } else {
-        print('Error al eliminar el evento. Código de estado: ${response.statusCode}');
+        print(
+            'Error al eliminar el evento. Código de estado: ${response.statusCode}');
       }
     } catch (e) {
       print('Error en la petición: $e');
@@ -117,41 +121,39 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   }
 
   Future<void> _deleteGift(int giftId, String userToken) async {
-  final dio = Dio();
-  final headers = {'Authorization': 'Bearer $userToken'};
-
-  try {
-    final response = await dio.delete(
-      'https://zas.onta.com.mx/api/deleteGift/$giftId',
-      options: Options(headers: headers),
-    );
-
-    if (response.statusCode == 200) {
-      print('Regalo eliminado con éxito');
-      obtenerRegalos(); // Actualiza la lista de regalos después de eliminar uno
-    } else {
-      print('Error al eliminar el regalo. Código de estado: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Error en la petición: $e');
-  }
-}
-
-  Future<void> _publicarEvento(int idEvent) async{
     final dio = Dio();
-    
+    final headers = {'Authorization': 'Bearer $userToken'};
+
     try {
-      final response = await dio.put(
-        'https://zas.onta.com.mx/api/published',
-        data: {
-              'id': idEvent
-              }
+      final response = await dio.delete(
+        'https://zasok.com/api/deleteGift/$giftId',
+        options: Options(headers: headers),
       );
+
+      if (response.statusCode == 200) {
+        print('Regalo eliminado con éxito');
+        obtenerRegalos(); // Actualiza la lista de regalos después de eliminar uno
+      } else {
+        print(
+            'Error al eliminar el regalo. Código de estado: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error en la petición: $e');
+    }
+  }
+
+  Future<void> _publicarEvento(int idEvent) async {
+    final dio = Dio();
+
+    try {
+      final response = await dio
+          .put('https://zasok.com/api/published', data: {'id': idEvent});
 
       if (response.statusCode == 200) {
         print('Evento publicado con éxito');
       } else {
-        print('Error al publicar el evento. Código de estado: ${response.statusCode}');
+        print(
+            'Error al publicar el evento. Código de estado: ${response.statusCode}');
       }
     } catch (e) {
       print('Error en la petición: $e');
@@ -181,11 +183,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               'Fecha del evento: ${widget.event.timedate}',
               style: const TextStyle(fontSize: 16),
             ),
-            if (widget.event.published != "false") 
-            Text(
-              'Codigo de evento: ${widget.event.code}',
-              style: const TextStyle(fontSize: 16),
-            ),
+            if (widget.event.published != "false")
+              Text(
+                'Codigo de evento: ${widget.event.code}',
+                style: const TextStyle(fontSize: 16),
+              ),
             const SizedBox(height: 16),
             const Text(
               'Añadir Regalo:',
@@ -219,7 +221,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                   Expanded(
+                  Expanded(
                     child: TextField(
                       controller: nameController,
                       decoration: const InputDecoration(
@@ -233,22 +235,23 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {if (
-                _pickedImage != null) {
-              _addGift(
-                userProvider.userToken,
-                nameController.text,
-                widget.event.id,
-                userProvider.userId, 
-                File(_pickedImage!.path),
-              );
-              await obtenerRegalos();
-            } else {
-              // Manejar el caso donde no se ha seleccionado una imagen
-              print('Debes seleccionar una imagen para el regalo.');
-            }
-          },
-              child: const Text('Agregar Regalo', style: TextStyle(fontSize: 16, color: Colors.black)),
+              onPressed: () async {
+                if (_pickedImage != null) {
+                  _addGift(
+                    userProvider.userToken,
+                    nameController.text,
+                    widget.event.id,
+                    userProvider.userId,
+                    File(_pickedImage!.path),
+                  );
+                  await obtenerRegalos();
+                } else {
+                  // Manejar el caso donde no se ha seleccionado una imagen
+                  print('Debes seleccionar una imagen para el regalo.');
+                }
+              },
+              child: const Text('Agregar Regalo',
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
             ),
             const Text(
               'Lista de Regalos:',
@@ -286,7 +289,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Image.network('https://zas.onta.com.mx/storage/images/${userProvider.userId}/${gift.photo}'),
+                                  child: Image.network(
+                                      'https://zasok.com/storage/images/${userProvider.userId}/${gift.photo}'),
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
@@ -298,7 +302,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {
-                                    _deleteGift(gift.id, userProvider.userToken);
+                                    _deleteGift(
+                                        gift.id, userProvider.userToken);
                                     giftProvider.deleteGift(gift.id);
                                   },
                                 ),
@@ -316,114 +321,123 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                 ElevatedButton(
-                  onPressed: widget.event.published == "false"
-                      ? () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          PaypalCheckoutView(
-                            sandboxMode: false,
-                            clientId: "AZKmKo4mCCTQT2GWMNGqKaIcXqffYMTqclvAaZ0UpZCNNP2YB_b-jfWGiGw9nEVwNXEDk-74xAY4P0CY",
-                            secretKey: "ED1Roj6I6yKGjcuVZO4CVu7KZPr1PGlT4Ux70fpGasGNbEeAdelmozv5W-7gvnf66ev0AMPEZvbWjt2v",
-                            onSuccess: (result) async{
-                              Navigator.pop(context);
-                              _publicarEvento(widget.event.id);
-                              _showEventCodeDialog(widget.event.code);
-                              Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PrincipalScreen(),
-                              ),
-                            );
-                            },
-                            note: 'Compra tus eventos', 
-                            onError: (error) {
-                              print(error);
-                              Navigator.pop(context);
-                              _showToast('Error en la transacción: $error');
-                            }, 
-                            onCancel: (){
-                              Navigator.pop(context);
-                              _showToast('Transacción cancelada');
-                            },
-                            transactions: const [
-                              {
-                                "amount": {
-                                  "total": '1',
-                                  "currency": "MXN",
-                                  "details": {
-                                    "subtotal": '1',
-                                    "shipping": '0',
-                                    "shipping_discount": 0
-                                  }
-                                },
-                                "description": "Creacion de Evento",
-                                "item_list": {
-                                  "items": [
-                                    {
-                                      "name": "Evento",
-                                      "quantity": 1,
-                                      "price": '1',
-                                      "currency": "MXN"
-                                    },
-                                  ],
-                                }
-                              }
-                            ],
-                            )));
-                        }
-                      : null, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text('Publicar', style: TextStyle(fontSize: 16, color: Colors.white)),
-                ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      bool confirmDelete = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Confirmar eliminación'),
-                            content: const Text('¿Seguro que quieres eliminar este evento?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: const Text('No'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: const Text('Sí'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (confirmDelete == true) {
-                        await _deleteEvent(widget.event.id, userProvider.userToken);
-                        eventProvider.deleteEvent(widget.event.id);
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PrincipalScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: widget.event.published == "false"
+                          ? () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PaypalCheckoutView(
+                                        sandboxMode: false,
+                                        clientId:
+                                            "AZKmKo4mCCTQT2GWMNGqKaIcXqffYMTqclvAaZ0UpZCNNP2YB_b-jfWGiGw9nEVwNXEDk-74xAY4P0CY",
+                                        secretKey:
+                                            "ED1Roj6I6yKGjcuVZO4CVu7KZPr1PGlT4Ux70fpGasGNbEeAdelmozv5W-7gvnf66ev0AMPEZvbWjt2v",
+                                        onSuccess: (result) async {
+                                          Navigator.pop(context);
+                                          _publicarEvento(widget.event.id);
+                                          _showEventCodeDialog(
+                                              widget.event.code);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const PrincipalScreen(),
+                                            ),
+                                          );
+                                        },
+                                        note: 'Compra tus eventos',
+                                        onError: (error) {
+                                          print(error);
+                                          Navigator.pop(context);
+                                          _showToast(
+                                              'Error en la transacción: $error');
+                                        },
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                          _showToast('Transacción cancelada');
+                                        },
+                                        transactions: const [
+                                          {
+                                            "amount": {
+                                              "total": '1',
+                                              "currency": "MXN",
+                                              "details": {
+                                                "subtotal": '1',
+                                                "shipping": '0',
+                                                "shipping_discount": 0
+                                              }
+                                            },
+                                            "description": "Creacion de Evento",
+                                            "item_list": {
+                                              "items": [
+                                                {
+                                                  "name": "Evento",
+                                                  "quantity": 1,
+                                                  "price": '1',
+                                                  "currency": "MXN"
+                                                },
+                                              ],
+                                            }
+                                          }
+                                        ],
+                                      )));
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: const Text('Publicar',
+                          style: TextStyle(fontSize: 16, color: Colors.white)),
                     ),
-                    child: const Text('Eliminar Evento', style: TextStyle(fontSize: 16, color: Colors.white)),
-                  ),
-                ],
-              ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        bool confirmDelete = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Confirmar eliminación'),
+                              content: const Text(
+                                  '¿Seguro que quieres eliminar este evento?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                  child: const Text('No'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text('Sí'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        if (confirmDelete == true) {
+                          await _deleteEvent(
+                              widget.event.id, userProvider.userToken);
+                          eventProvider.deleteEvent(widget.event.id);
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrincipalScreen(),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text('Eliminar Evento',
+                          style: TextStyle(fontSize: 16, color: Colors.white)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -442,7 +456,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Este es tu código de evento!\nCompartelo para invitar:\n '),
+              const Text(
+                  'Este es tu código de evento!\nCompartelo para invitar:\n '),
               const SizedBox(height: 8),
               Center(
                 child: Text(
@@ -454,11 +469,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 ),
               ),
               IconButton(
-                    icon: const Icon(Icons.content_copy),
-                    onPressed: () {
-                      _copyToClipboard(eventCode);
-                    },
-                  ),
+                icon: const Icon(Icons.content_copy),
+                onPressed: () {
+                  _copyToClipboard(eventCode);
+                },
+              ),
             ],
           ),
           actions: [
@@ -476,10 +491,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   void _showToast(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2)
-      ),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
     );
   }
 

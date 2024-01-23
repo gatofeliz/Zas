@@ -26,7 +26,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
     final dio = Dio();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final eventProvider = Provider.of<EventProvider>(context, listen: false);
-    final url = 'https://zas.onta.com.mx/api/eventList/${userProvider.userId}';
+    final url = 'https://zasok.com/api/eventList/${userProvider.userId}';
 
     try {
       final response = await dio.get(
@@ -39,9 +39,9 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
       if (response.statusCode == 200) {
         print(response.data['event']);
         final List<dynamic> events = response.data['event'];
-      eventProvider.updateEventList(
-        events.map((event) => EventItem.fromJson(event)).toList(),
-      );
+        eventProvider.updateEventList(
+          events.map((event) => EventItem.fromJson(event)).toList(),
+        );
       } else {
         print('Error: ${response.statusCode}');
       }
@@ -71,7 +71,8 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EventDetailsScreen(event: event),
+                            builder: (context) =>
+                                EventDetailsScreen(event: event),
                           ),
                         );
                       },
@@ -81,7 +82,8 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                           color: const Color.fromARGB(255, 252, 235, 255),
                           child: ListTile(
                             title: Text('Nombre del Evento: ${event.name}'),
-                            subtitle: Text('Fecha del evento: ${event.timedate}'),
+                            subtitle:
+                                Text('Fecha del evento: ${event.timedate}'),
                           ),
                         ),
                       ),

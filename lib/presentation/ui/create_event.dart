@@ -8,7 +8,6 @@ import '../controllers/navbar_provider.dart';
 import '../controllers/user_provider.dart';
 import '../domain/event_model.dart';
 
-
 class CreateEvent extends StatefulWidget {
   const CreateEvent({Key? key}) : super(key: key);
 
@@ -66,50 +65,50 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   void _createEvent() async {
-  String eventName = eventController.text;
-  String timedate = timedateController.text;
-  final userProvider = Provider.of<UserProvider>(context, listen: false);
-  String apiUrl = 'https://zas.onta.com.mx/public/api/storeEvent';
+    String eventName = eventController.text;
+    String timedate = timedateController.text;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    String apiUrl = 'https://zasok.com/api/storeEvent';
 
-  Map<String, dynamic> requestBody = {
-    'event': eventName,
-    'timedate': timedate,
-    'user_id': userProvider.userId,
-  };
+    Map<String, dynamic> requestBody = {
+      'event': eventName,
+      'timedate': timedate,
+      'user_id': userProvider.userId,
+    };
 
-  if (eventName.isEmpty || timedate.isEmpty) {
-    _showToast('Por favor, llena todos los campos');
-    return;
-  }
-
-
-  try {
-    Dio dio = Dio();
-    final response = await dio.post(
-      apiUrl,
-      data: requestBody,
-    );
-    if (response.statusCode == 200) {
-
-      _showToast(response.data['message']);
-      eventController.clear();
-      getData();
-      // ignore: use_build_context_synchronously
-      Provider.of<NavigationProvider>(context, listen: false).selectedIndex = 2;
-    } else {
-      print('Error en la solicitud. Código de estado: ${response.statusCode}');
-      print('Mensaje de error: ${response.data}');
+    if (eventName.isEmpty || timedate.isEmpty) {
+      _showToast('Por favor, llena todos los campos');
+      return;
     }
-  } catch (e) {
-    print('Error en la solicitud: $e');
-  }
-}
 
- Future<void> getData() async {
+    try {
+      Dio dio = Dio();
+      final response = await dio.post(
+        apiUrl,
+        data: requestBody,
+      );
+      if (response.statusCode == 200) {
+        _showToast(response.data['message']);
+        eventController.clear();
+        getData();
+        // ignore: use_build_context_synchronously
+        Provider.of<NavigationProvider>(context, listen: false).selectedIndex =
+            2;
+      } else {
+        print(
+            'Error en la solicitud. Código de estado: ${response.statusCode}');
+        print('Mensaje de error: ${response.data}');
+      }
+    } catch (e) {
+      print('Error en la solicitud: $e');
+    }
+  }
+
+  Future<void> getData() async {
     final dio = Dio();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final eventProvider = Provider.of<EventProvider>(context, listen: false);
-    final url = 'https://zas.onta.com.mx/api/eventList/${userProvider.userId}';
+    final url = 'https://zasok.com/api/eventList/${userProvider.userId}';
 
     try {
       final response = await dio.get(
@@ -122,9 +121,9 @@ class _CreateEventState extends State<CreateEvent> {
       if (response.statusCode == 200) {
         print(response.data['event']);
         final List<dynamic> events = response.data['event'];
-      eventProvider.updateEventList(
-        events.map((event) => EventItem.fromJson(event)).toList(),
-      );
+        eventProvider.updateEventList(
+          events.map((event) => EventItem.fromJson(event)).toList(),
+        );
       } else {
         print('Error: ${response.statusCode}');
       }
@@ -133,12 +132,11 @@ class _CreateEventState extends State<CreateEvent> {
     }
   }
 
-void _showToast(String message) {
+  void _showToast(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
       ),
     );
   }
-
 }
