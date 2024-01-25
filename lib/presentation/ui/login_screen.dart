@@ -248,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 100),
                     ClipOval(
                       child: Image.asset(
-                        'assets/logo.jpeg',
+                        'assets/logozas.jpeg',
                         height: 200,
                         fit: BoxFit.cover,
                       ),

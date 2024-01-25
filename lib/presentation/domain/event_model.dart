@@ -5,7 +5,7 @@ class EventItem {
   final String code;
   final int userId;
   final String published;
-  final int eventId;
+  final int? eventId;
   final int? giftId; 
 
   EventItem({
@@ -15,7 +15,7 @@ class EventItem {
     required this.code,
     required this.userId,
     required this.published,
-    required this.eventId,
+   this.eventId,
     this.giftId,
   });
 

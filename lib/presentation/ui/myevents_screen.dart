@@ -28,12 +28,11 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
     final eventProvider = Provider.of<EventProvider>(context, listen: false);
     final url = 'https://zasok.com/api/eventList/${userProvider.userId}';
 
+    print(userProvider.userId);
+
     try {
       final response = await dio.get(
         url,
-        options: Options(
-          headers: {'Authorization': 'Bearer ${userProvider.userToken}'},
-        ),
       );
 
       if (response.statusCode == 200) {
@@ -46,7 +45,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
         print('Error: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      print('Error: aquiiiiii$e');
     }
   }
 

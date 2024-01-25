@@ -177,6 +177,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             Text(
               'Nombre del Evento: ${widget.event.name}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
             ),
             const SizedBox(height: 8),
             Text(
@@ -184,10 +185,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               style: const TextStyle(fontSize: 16),
             ),
             if (widget.event.published != "false")
-              Text(
+              Row(children: [
+                Text(
                 'Codigo de evento: ${widget.event.code}',
                 style: const TextStyle(fontSize: 16),
               ),
+              IconButton(onPressed: (){
+                _copyToClipboard('Te invito a mi evento ${widget.event.name}! \n Unete usando el codigo: ${widget.event.code} y comparte este momento conmigo!');    
+              }, icon: const Icon(Icons.copy))
+              ],),
             const SizedBox(height: 16),
             const Text(
               'Añadir Regalo:',
@@ -293,6 +299,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       'https://zasok.com/storage/images/${userProvider.userId}/${gift.photo}'),
                                 ),
                                 const SizedBox(width: 8),
+                                if(gift.dedicatory != null)
+                                  Expanded(
+                                    child: Text(
+                                      gift.dedicatory!,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     gift.name,
@@ -361,10 +375,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                         transactions: const [
                                           {
                                             "amount": {
-                                              "total": '1',
+                                              "total": '69',
                                               "currency": "MXN",
                                               "details": {
-                                                "subtotal": '1',
+                                                "subtotal": '69',
                                                 "shipping": '0',
                                                 "shipping_discount": 0
                                               }
@@ -375,7 +389,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                                 {
                                                   "name": "Evento",
                                                   "quantity": 1,
-                                                  "price": '1',
+                                                  "price": '69',
                                                   "currency": "MXN"
                                                 },
                                               ],
@@ -471,7 +485,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               IconButton(
                 icon: const Icon(Icons.content_copy),
                 onPressed: () {
-                  _copyToClipboard(eventCode);
+                  _copyToClipboard('Te invito a mi evento ${widget.event.name}! \n Unete usando el codigo: $eventCode y comparte este momento conmigo!');
                 },
               ),
             ],
